@@ -1,5 +1,10 @@
 # Importar o flask que foi instalado dentro do venv
-from flask import Flask
+from flask import (
+    Flask,
+    # O módulo jsonify é utilizado para converter uma coleção qualquer em
+    #   um documento no formato json
+    jsonify
+)
 
 # Para que seja possivel conectar-se a um banco de dados é necessário utilizar o DBI
 # Neste caso utilizaremos o SGBD SQLite, sendo assim devemos importa o módulo sqlite3
@@ -43,3 +48,43 @@ def produtos(): # View Function
     # Para que esta função retorne uma API é necessário que seja retornado um tipo de coleção
     #   podendo ser uma lista ou um dicionário
     return dados
+
+# Denição da rota através do decorador .route
+# A rota que foi criada está utilização o formato dinâmico de definições rota.
+# A parte dinâmica da rota é identifica pelos símbolos < e >
+# NOTE: As rotas não tem relações entre si
+@app.route('/api/produtos/<produto_nome>')
+# O parâmetro utilizado na função é o mesmo nome utilizado na parte dinâmica da rota
+def produto_detalhes(produto_nome): # View function (Funão de visão)
+    # Conexão com banco de dados
+    con = sqlite3.connect('cia-animal.db')
+
+    # Criação do cursor
+    cur = con.cursor()
+
+    # A variável SQL é uma instrução de banco de dados, que é representada com um texto no
+    #   Python, sendo assim não existe uma validação pelo Python, a validação só acontece
+    #   no momento que a consulta é enviada para o banco de dados utilizando o cursor que
+    #   no código em questão é representado pela variável 'cur'
+    # Para simplicar a codificação do SQL é interessante utilizar as aspas duplas como
+    #   simbolos para definir textos
+    # Uma forma de aplicar um filtro dinâmico na consulta que será enviada, é a utilização
+    #   de alguma forma de interpolação
+    sql = f"SELECT nome, descricao, valor FROM produtos WHERE nome = '{produto_nome}'"
+
+    # Executar a consulta utilizando o cursor
+    cur.execute( sql )
+
+    # Para caso de consulta que retornam somente um registro,
+    #   o uso do fetchone (busca um registro) é o método mais indicado para este tipo ação
+    # NOTE: o fetchone retorma somente uma tupla, quando o fetchall
+    #   retorna uma lista de tuplas
+    dados = cur.fetchone()
+
+    # Fechar a conexão
+    con.close()
+
+    # Toda função de visão deve ter um retorno
+    # No caso que a informação armazenda na variável 'dados' é uma tupla, se faz necessário
+    #   a utilização do jsonify
+    return jsonify(dados)
