@@ -13,6 +13,13 @@ Com o ambiente virual devidamente ativado é necessário instalar o flask, utili
 
     pip install flask
 
+O projeto desenvolvido utiliza o módulo 'requests' que não está presente nos módulos padrões disponíveis no Python, com isso é necesário que seja feita a instalação.
+
+    pip install requests
+
+## Execução
+
+- O motor do flask deve ser executado em um termial independe \
 Para executar a aplicação flask é necessário executar o seguinte comando:
 
     set FLASK_APP=cia_animal_api
@@ -20,3 +27,8 @@ Para executar a aplicação flask é necessário executar o seguinte comando:
 
 NOTE: o comando de definição do módulo é executado somente uma vez no ambiente, sendo assim para seguir na execucação basta executa o comando flask run.
 A sugestão é utilizar o parâmetro --debug para facilitar a identificação de erros no desenvolvimento.
+
+- A aplicação de consumo da API deve ser executada de maneira indepente, ou seja, em um outro terminal
+
+    python -m consumo_api
+

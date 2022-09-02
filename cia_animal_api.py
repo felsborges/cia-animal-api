@@ -19,11 +19,6 @@ def produtos(): # View Function
     #   este caminho é informado através de um texto, infornando o nome do arquivo
     con = sqlite3.connect('cia-animal.db')
 
-    # Por padrão o retorno dos dados é uma lista de tuplas, mas se desejamos uma lista
-    #   de dicionário o sqlite3 possuiu uma configuração na conexão para que esse retorno
-    #   seja feito
-    # con.row_factory = sqlite3.Row
-
     # Após a conexão é necessário estabeler um caminho de comunicação
     #   este caminho será chamdo de cursor, nele poderemos enviar comandos ao banco.
     # Os comando do banco de dados utilizaram a liguagem SQL
