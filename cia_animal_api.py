@@ -8,6 +8,10 @@ import sqlite3
 # Criar a apliação (motor) para a execução da aplicação web
 app = Flask(__name__)
 
+def dict_factory(cursor, row):
+    col_names = [col[0] for col in cursor.description]
+    return {key: value for key, value in zip(col_names, row)}
+
 # Para esta dinâmica iremos criar a rota /api/produtos para listar os produtos
 # LEMBRE: a rota é definida dentro da variável da aplição
 @app.route('/api/produtos')
@@ -18,6 +22,7 @@ def produtos(): # View Function
     # Para estabelecer uma conexão é que seja informado o caminho da conexão
     #   este caminho é informado através de um texto, infornando o nome do arquivo
     con = sqlite3.connect('cia-animal.db')
+    con.row_factory = dict_factory
 
     # Após a conexão é necessário estabeler um caminho de comunicação
     #   este caminho será chamdo de cursor, nele poderemos enviar comandos ao banco.
